@@ -17,9 +17,9 @@ set -o pipefail
 # https://doi.org/10.1186/s12864-015-1519-z
 # https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1519-z
 
-# example commands taken from the NaS pipeline
+# example commands taken from the NaS pipeline ()
               # blat -tileSize=$TILE -stepSize=$STEP -noHead barcode12 Plate1_A5_CCTCAGAGA_L002 output.psl
-              # cat $OUTPUT_DIR/tmp/ILMN_reads.fa | parallel -j $NB_PROC --cat --pipe --block 10M --recstart ">" "$BLAT -tileSize=$TILE -stepSize=$STEP -noHead $NANO_READS {} $OUTPUT_DIR/tmp/psl/blat-alignment.job{#}.tile$TILE.step$STEP.psl" >$OUTPUT_DIR/tmp/blat-alignment.stderr
+              # cat $OUTPUT_DIR/tmp/ILMN_reads.fa | parallel -j $NB_PROC --cat --pipe --block 10M --recstart ">" "$BLAT -tileSize=$TILE -stepSize=$STEP -noHead $NANO_READS {} $OUTPUT_DIR/tmp/psl/blat-alignment.job{#}.tile$TILE.step$STEP.psl" 2>$OUTPUT_DIR/tmp/blat-alignment.stderr
                             # This will BLAT map reads.  $TILE=10 and $STEP=5
               # mkdir output_dir
               # cat your_psl_file.psl | awk -v PFX=output_dir '{ file=PFX"/"$14".psl"; print $0>file; }'
@@ -73,8 +73,8 @@ cd ${WORKDIR}; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION
 # barcode 12 should have 0 good matches to A8 Tripleurospermum maritimum
 # barcode 12 should have the most good matches to E3 Epilobium hirsutum
 
-# the parallel version of the above.  creates lots of output files, which still need a command to be concatenated
-# cat ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz | gunzip | ${PARALLEL} -j ${NPROC} --cat --pipe --block 10M --recstart ">" "blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta {} ${WORKDIR}output_Plate1_${QUERY}_job{#}.psl" >${WORKDIR}output_Plate1_${QUERY}.stderr
+# the parallel version of the above.  creates lots of output files, which still need a command to be concatenated, and then need a way to select out only those Illumina reads that have > 220 matching nucleotides
+# cat ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz | gunzip | ${PARALLEL} -j ${NPROC} --cat --pipe --block 10M --recstart ">" "blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta {} ${WORKDIR}output_Plate1_${QUERY}_job{#}.psl" 2>${WORKDIR}output_Plate1_${QUERY}.stderr
 
 
 # to create separate psl files for each minION read.  Not useful for my purposes
