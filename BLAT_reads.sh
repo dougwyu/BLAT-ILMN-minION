@@ -13,17 +13,6 @@ set -o pipefail
 # https://doi.org/10.1186/s12864-015-1519-z
 # https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1519-z
 
-# GNU parallel install on hpc
-              # cd scripts/
-              # wget http://ftp.heanet.ie/mirrors/gnu/parallel/parallel-latest.tar.bz2
-              # bzip2 -d parallel-latest.tar.bz2
-              # tar -xvf parallel-latest.tar
-              # cd parallel-20170722
-              # (wget -O - pi.dk/3 || curl pi.dk/3/ || fetch -o - http://pi.dk/3) | bash  # installs to ~/bin
-              # mv ~/bin ~/scripts/parallel-20170722/
-              # ~/scripts/parallel-20170722/bin/parallel -h
-              # O. Tange (2011): GNU Parallel - The Command-Line Power Tool, ;login: The USENIX Magazine, February 2011:42-47.
-
 # example commands taken from the NaS pipeline
               # blat -tileSize=$TILE -stepSize=$STEP -noHead barcode12 Plate1_A5_CCTCAGAGA_L002 output.psl
               # cat $OUTPUT_DIR/tmp/ILMN_reads.fa | parallel -j $NB_PROC --cat --pipe --block 10M --recstart ">" "$BLAT -tileSize=$TILE -stepSize=$STEP -noHead $NANO_READS {} $OUTPUT_DIR/tmp/psl/blat-alignment.job{#}.tile$TILE.step$STEP.psl" >$OUTPUT_DIR/tmp/blat-alignment.stderr
@@ -36,27 +25,27 @@ set -o pipefail
 # http://www.ensembl.org/info/website/upload/psl.html
 # Fields are space-separated, and all 21 are required.
 #
-# matches - Number of matching bases that aren't repeats.
-# misMatches - Number of bases that don't match.
-# repMatches - Number of matching bases that are part of repeats.
-# nCount - Number of 'N' bases.
-# qNumInsert - Number of inserts in query.
-# qBaseInsert - Number of bases inserted into query.
-# tNumInsert - Number of inserts in target.
-# tBaseInsert - Number of bases inserted into target.
-# strand - defined as + (forward) or - (reverse) for query strand. In mouse, a second '+' or '-' indecates genomic strand.
-# qName - Query sequence name.
-# qSize - Query sequence size.
-# qStart - Alignment start position in query.
-# qEnd - Alignment end position in query.
-# tName - Target sequence name.
-# tSize - Target sequence size.
-# tStart - Alignment start position in target.
-# tEnd - Alignment end position in target.
-# blockCount - Number of blocks in the alignment.
-# blockSizes - Comma-separated list of sizes of each block.
-# qStarts - Comma-separated list of start position of each block in query.
-# tStarts - Comma-separated list of start position of each block in target.
+              # matches - Number of matching bases that aren't repeats.
+              # misMatches - Number of bases that don't match.
+              # repMatches - Number of matching bases that are part of repeats.
+              # nCount - Number of 'N' bases.
+              # qNumInsert - Number of inserts in query.
+              # qBaseInsert - Number of bases inserted into query.
+              # tNumInsert - Number of inserts in target.
+              # tBaseInsert - Number of bases inserted into target.
+              # strand - defined as + (forward) or - (reverse) for query strand. In mouse, a second '+' or '-' indecates genomic strand.
+              # qName - Query sequence name.
+              # qSize - Query sequence size.
+              # qStart - Alignment start position in query.
+              # qEnd - Alignment end position in query.
+              # tName - Target sequence name.
+              # tSize - Target sequence size.
+              # tStart - Alignment start position in target.
+              # tEnd - Alignment end position in target.
+              # blockCount - Number of blocks in the alignment.
+              # blockSizes - Comma-separated list of sizes of each block.
+              # qStarts - Comma-separated list of start position of each block in query.
+              # tStarts - Comma-separated list of start position of each block in target.
 
 
 #### Interactive version
@@ -75,6 +64,7 @@ blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode12_all_
 
 mkdir output_Plate1_A5_output/
 cat output_Plate1_A5_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_A5_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
+
 
 #### bsub version
 
