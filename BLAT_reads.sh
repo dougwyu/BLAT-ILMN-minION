@@ -35,11 +35,9 @@ set -o pipefail
 #### Interactive version
 ssh grace
 ssh hpc.uea.ac.uk
-interactive -x
-# interactive -x -R "rusage[mem=20000]" -M 22000  # alternative is:  interactive -q interactive-lm
+# interactive -x # exclusive job, which is alternative to interactive -R
+interactive -R "rusage[mem=4000]" -M 4000 # 4000=4GB RAM, which is the max for an hpc interactive job
 module load blat # v. 36
-PARALLEL=~/scripts/parallel-20170722/bin/parallel
-# ${PARALLEL} -h # to run
 PARALLEL=~/scripts/parallel-20170722/bin/parallel
 ILMNFAS=plantskims/prepare_forBWA/prepare_forblast/
 WORKDIR=~/pollen_minION/
@@ -52,16 +50,15 @@ blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode12_all_
 #### bsub version
 
 #!/bin/sh
-#BSUB -q huge-mem  # debug, short (5 hours), medium (24 hours), long (3 days)
-#BSUB -n 16
-#BSUB -x
+#BSUB -q mellanox-ib  # mellanox-ib 7 days
+#BSUB -n 16  # add #BSUB -x # if i want an exclusive
 #BSUB -J blatminion  # 10 chars max
 #BSUB -B
 #BSUB -N
 #BSUB -oo blatminion.out
 #BSUB -eo blatminion.err
-#BSUB -R "rusage[mem=510000]"
-#BSUB -M 512000
+#BSUB -R "rusage[mem=64000]" # 72000 = 64 GB RAM. mellanox-ib has 128 GB
+#BSUB -M 73000
 
 
 . /etc/profile
