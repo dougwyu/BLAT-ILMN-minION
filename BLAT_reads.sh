@@ -64,8 +64,8 @@ WORKDIR=~/pollen_minION/
 TILE=10
 STEP=5
 TARGET=12  # minION reads
-QUERY=B5  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
-
+QUERY=E3  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
+NPROC=$(grep -c processor /proc/cpuinfo)
 
 cd ${WORKDIR}; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
 # barcode 12 should have many good matches to A5 Papaver rhoeas
@@ -73,9 +73,13 @@ cd ${WORKDIR}; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION
 # barcode 12 should have 0 good matches to A8 Tripleurospermum maritimum
 # barcode 12 should have the most good matches to E3 Epilobium hirsutum
 
-# to create separate file for each minION read.  Not useful for my purposes
-mkdir output_Plate1_${QUERY}_output/
-cat output_Plate1_${QUERY}.psl | awk -v PFX=~/pollen_minION/output_Plate1_${QUERY}_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
+# the parallel version of the above.  creates lots of output files, which still need a command to be concatenated
+# cat ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz | gunzip | ${PARALLEL} -j ${NPROC} --cat --pipe --block 10M --recstart ">" "blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta {} ${WORKDIR}output_Plate1_${QUERY}_job{#}.psl" >${WORKDIR}output_Plate1_${QUERY}.stderr
+
+
+# to create separate psl files for each minION read.  Not useful for my purposes
+# mkdir output_Plate1_${QUERY}_output/
+# cat output_Plate1_${QUERY}.psl | awk -v PFX=~/pollen_minION/output_Plate1_${QUERY}_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
 
 
 #### bsub version
