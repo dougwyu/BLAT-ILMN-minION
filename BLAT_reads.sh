@@ -32,6 +32,33 @@ set -o pipefail
               # cat your_psl_file.psl | awk -v PFX=output_dir '{ file=PFX"/"$14".psl"; print $0>file; }'
                             # This will create one file per MinION read with the name of Illumina reads that mapped to this particular read.
 
+# PSL file output
+# http://www.ensembl.org/info/website/upload/psl.html
+# Fields are space-separated, and all 21 are required.
+#
+# matches - Number of matching bases that aren't repeats.
+# misMatches - Number of bases that don't match.
+# repMatches - Number of matching bases that are part of repeats.
+# nCount - Number of 'N' bases.
+# qNumInsert - Number of inserts in query.
+# qBaseInsert - Number of bases inserted into query.
+# tNumInsert - Number of inserts in target.
+# tBaseInsert - Number of bases inserted into target.
+# strand - defined as + (forward) or - (reverse) for query strand. In mouse, a second '+' or '-' indecates genomic strand.
+# qName - Query sequence name.
+# qSize - Query sequence size.
+# qStart - Alignment start position in query.
+# qEnd - Alignment end position in query.
+# tName - Target sequence name.
+# tSize - Target sequence size.
+# tStart - Alignment start position in target.
+# tEnd - Alignment end position in target.
+# blockCount - Number of blocks in the alignment.
+# blockSizes - Comma-separated list of sizes of each block.
+# qStarts - Comma-separated list of start position of each block in query.
+# tStarts - Comma-separated list of start position of each block in target.
+
+
 #### Interactive version
 ssh grace
 ssh hpc.uea.ac.uk
@@ -46,6 +73,8 @@ STEP=5
 
 blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode12_all_pass.fasta ${WORKDIR}${ILMNFAS}A5_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_A5.psl
 
+mkdir output_Plate1_A5_output/
+cat output_Plate1_A5_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_A5_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
 
 #### bsub version
 
