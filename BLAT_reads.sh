@@ -63,7 +63,7 @@ TARGET=12  # minION reads
 QUERY=B5  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
 
 
-cd ~/pollen_minION; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
+cd ${WORKDIR}; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
 # barcode 12 should have many good matches to A5
 # barcode 12 should have 0 good matches to B5 (but this is a congener of A5 so some false positives are expected)
 # barcode 12 should have 0 good matches to A8
@@ -84,7 +84,7 @@ cat output_Plate1_${QUERY}_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_${Q
 #BSUB -N
 #BSUB -oo blatminion.out
 #BSUB -eo blatminion.err
-#BSUB -R "rusage[mem=64000]" # 72000 = 64 GB RAM. mellanox-ib has 128 GB
+#BSUB -R "rusage[mem=64000]" # 72000 = 72 GB RAM. mellanox-ib has 128 GB
 #BSUB -M 73000
 
 
@@ -95,5 +95,7 @@ ILMNFAS=plantskims/prepare_forBWA/prepare_forblast/
 WORKDIR=~/pollen_minION/
 TILE=10
 STEP=5
+TARGET=12  # minION reads
+QUERY=B5  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
 
-blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode12_all_pass.fasta ${WORKDIR}${ILMNFAS}A5_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_A5.psl
+blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
