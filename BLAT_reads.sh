@@ -8,6 +8,10 @@ set -o pipefail
 #######################################################################################
 #######################################################################################
 
+# To do:
+# 1. parallel:  run all 50 skims against all 12 barcodes
+# 2. pipe filter psl file to accept only those with > 220 matches
+
 # idea taken from NaS pipeline from Madoui et al. (2015, BMC Genomics)
 # https://github.com/institut-de-genomique/NaS
 # https://doi.org/10.1186/s12864-015-1519-z
@@ -64,14 +68,14 @@ QUERY=B5  # Illumina reads = plant skims that have been adapter-trimmed, denoise
 
 
 cd ${WORKDIR}; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
-# barcode 12 should have many good matches to A5
-# barcode 12 should have 0 good matches to B5 (but this is a congener of A5 so some false positives are expected)
-# barcode 12 should have 0 good matches to A8
-# barcode 12 should have the most good matches to E3
+# barcode 12 should have many good matches to A5 Papaver rhoeas
+# barcode 12 should have 0 good matches to B5 Papaver somniferum (but is a congener of A5 so some false positives are expected)
+# barcode 12 should have 0 good matches to A8 Tripleurospermum maritimum
+# barcode 12 should have the most good matches to E3 Epilobium hirsutum
 
-# to create separate file for each minION read.  Not terribly useful for my purposes
+# to create separate file for each minION read.  Not useful for my purposes
 mkdir output_Plate1_${QUERY}_output/
-cat output_Plate1_${QUERY}_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_${QUERY}_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
+cat output_Plate1_${QUERY}.psl | awk -v PFX=~/pollen_minION/output_Plate1_${QUERY}_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
 
 
 #### bsub version
@@ -96,6 +100,6 @@ WORKDIR=~/pollen_minION/
 TILE=10
 STEP=5
 TARGET=12  # minION reads
-QUERY=B5  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
+QUERY=E3  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
 
 blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
