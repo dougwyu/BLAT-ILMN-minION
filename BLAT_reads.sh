@@ -59,11 +59,15 @@ ILMNFAS=plantskims/prepare_forBWA/prepare_forblast/
 WORKDIR=~/pollen_minION/
 TILE=10
 STEP=5
+QUERY=A8
+TARGET=12
 
-blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode12_all_pass.fasta ${WORKDIR}${ILMNFAS}A5_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_A5.psl
+cd ~/pollen_minION; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
+# barcode 12 should have many good matches to A5
+# barcode 12 should have 0 good matches to A8
 
-mkdir output_Plate1_A5_output/
-cat output_Plate1_A5_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_A5_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
+mkdir output_Plate1_${QUERY}_output/
+cat output_Plate1_${QUERY}_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_${QUERY}_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
 
 
 #### bsub version
