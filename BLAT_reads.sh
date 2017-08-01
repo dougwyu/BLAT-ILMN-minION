@@ -59,13 +59,15 @@ ILMNFAS=plantskims/prepare_forBWA/prepare_forblast/
 WORKDIR=~/pollen_minION/
 TILE=10
 STEP=5
-QUERY=E3
-TARGET=12
+TARGET=12  # minION reads
+QUERY=B5  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
+
 
 cd ~/pollen_minION; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
 # barcode 12 should have many good matches to A5
+# barcode 12 should have 0 good matches to B5 (but this is a congener of A5 so some false positives are expected)
 # barcode 12 should have 0 good matches to A8
-# barcode 12 should have many good matches to E3
+# barcode 12 should have the most good matches to E3
 
 
 mkdir output_Plate1_${QUERY}_output/
