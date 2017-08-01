@@ -69,7 +69,7 @@ cd ~/pollen_minION; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}m
 # barcode 12 should have 0 good matches to A8
 # barcode 12 should have the most good matches to E3
 
-
+# to create separate file for each minION read.  Not terribly useful for my purposes
 mkdir output_Plate1_${QUERY}_output/
 cat output_Plate1_${QUERY}_cp.psl | awk -v PFX=~/pollen_minION/output_Plate1_${QUERY}_output/ '{ file=PFX"/"$14".psl"; print $0>file; }'  # creates as many files as there are minION reference reads
 
