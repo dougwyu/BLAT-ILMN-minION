@@ -85,15 +85,15 @@ cd ${WORKDIR}; blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION
 #### bsub version
 
 #!/bin/sh
-#BSUB -q mellanox-ib  # mellanox-ib 7 days
-#BSUB -n 16  # add #BSUB -x # if i want an exclusive
-#BSUB -J blatminion  # 10 chars max
+#BSUB -q short-eth  # short-eth has 24 hrs, mellanox-ib 7 days
+#BSUB -n 12  # short-eth has 24 cores, add #BSUB -x # if i want an exclusive
+#BSUB -J blatmin  # 10 chars max
 #BSUB -B
 #BSUB -N
-#BSUB -oo blatminion.out
-#BSUB -eo blatminion.err
-#BSUB -R "rusage[mem=64000]" # 72000 = 72 GB RAM. mellanox-ib has 128 GB
-#BSUB -M 73000
+#BSUB -oo blatmin.out
+#BSUB -eo blatmin.err
+#BSUB -R "rusage[mem=3000]" # 3000 = 3 GB RAM. BLAT uses < 500 MB
+#BSUB -M 4000
 
 
 . /etc/profile
