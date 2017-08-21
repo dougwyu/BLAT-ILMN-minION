@@ -11,6 +11,7 @@ set -o pipefail
 # To do:
 # 1. parallel:  run all 50 skims against all 12 barcodes
 # 2. pipe filter psl file to accept only those with > 220 matches
+# 3. try filtlong as another way to filter minION reads by matches to illumina files: https://github.com/rrwick/Filtlong
 
 # idea taken from NaS pipeline from Madoui et al. (2015, BMC Genomics)
 # https://github.com/institut-de-genomique/NaS
@@ -107,3 +108,10 @@ TARGET=12  # minION reads
 QUERY=E3  # Illumina reads = plant skims that have been adapter-trimmed, denoised, merged, and converted to fasta
 
 blat -tileSize=${TILE} -stepSize=${STEP} -noHead ${WORKDIR}minION/barcode${TARGET}_all_pass.fasta ${WORKDIR}${ILMNFAS}${QUERY}_bfc_trimed_uniques.fasta.gz ${WORKDIR}output_Plate1_${QUERY}.psl
+
+
+# to parse a blat *.psl file so that the nth field has a value > 220, use something like this:
+# awk -F "\t" '{ $n > 220 }' *.psl | long-mapped_illuminareads.psl
+
+# can i pipe the output of blat into awk and then into gzip?
+# blat | awk | gzip
