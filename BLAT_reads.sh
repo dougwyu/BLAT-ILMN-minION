@@ -11,7 +11,7 @@ set -o pipefail
 # To do:
 # 1. parallel:  run all 50 skims against all 12 barcodes, try putting the loop into a shell script and calling that in the bsub file
 # 2. script to separate psl files into one file for each minION read, and then filter by number of matching reads, evenness of reads, etc.?, and record in a table
-# 3. try filtlong as another way to filter minION reads by matches to illumina files: https://github.com/rrwick/Filtlong
+# 3. try kWIP https://kwip.readthedocs.io/en/latest/ instead of mash
 
 # idea taken from NaS pipeline from Madoui et al. (2015, BMC Genomics)
 # https://github.com/institut-de-genomique/NaS
@@ -534,3 +534,7 @@ bedtools bedtobam -bed12 -i input.bed -g hg38.chrom.sizes > output.bam
 #    done
 # done
 #
+
+
+# mosdepth for calculating genome coverage
+# https://github.com/brentp/mosdepth
